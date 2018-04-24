@@ -6,11 +6,42 @@
 	objectVersion = 50;
 	objects = {
 
+/* Begin PBXFileReference section */
+		97DD82D1208F4E9C00D0AE40 /* Makefile */ = {isa = PBXFileReference; explicitFileType = sourcecode.make; fileEncoding = 4; path = Makefile; sourceTree = "<group>"; };
+		97DD82D2208F514400D0AE40 /* Lexer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Lexer.cpp; sourceTree = "<group>"; };
+		97DD82D3208F516700D0AE40 /* Lexer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Lexer.hpp; sourceTree = "<group>"; };
+		97DD82D4208F56FF00D0AE40 /* AVMException.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AVMException.hpp; sourceTree = "<group>"; };
+		97DD82D5208F571600D0AE40 /* AVMException.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AVMException.cpp; sourceTree = "<group>"; };
+		97DD82D6208F5DAC00D0AE40 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
 /* Begin PBXGroup section */
 		97DD82C4208F4E3500D0AE40 = {
 			isa = PBXGroup;
 			children = (
+				97DD82D0208F4E9C00D0AE40 /* includes */,
+				97DD82CF208F4E9C00D0AE40 /* src */,
+				97DD82D1208F4E9C00D0AE40 /* Makefile */,
 			);
+			sourceTree = "<group>";
+		};
+		97DD82CF208F4E9C00D0AE40 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				97DD82D2208F514400D0AE40 /* Lexer.cpp */,
+				97DD82D5208F571600D0AE40 /* AVMException.cpp */,
+				97DD82D6208F5DAC00D0AE40 /* main.cpp */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		97DD82D0208F4E9C00D0AE40 /* includes */ = {
+			isa = PBXGroup;
+			children = (
+				97DD82D3208F516700D0AE40 /* Lexer.hpp */,
+				97DD82D4208F56FF00D0AE40 /* AVMException.hpp */,
+			);
+			path = includes;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -63,7 +94,7 @@
 		97DD82CA208F4E3500D0AE40 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -118,7 +149,7 @@
 		97DD82CB208F4E3500D0AE40 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
