@@ -8,7 +8,7 @@
 
 /* Begin PBXFileReference section */
 		97DD82D1208F4E9C00D0AE40 /* Makefile */ = {isa = PBXFileReference; explicitFileType = sourcecode.make; fileEncoding = 4; path = Makefile; sourceTree = "<group>"; };
-		97DD82D2208F514400D0AE40 /* Lexer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Lexer.cpp; sourceTree = "<group>"; };
+		97DD82D2208F514400D0AE40 /* Lexer.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; path = Lexer.cpp; sourceTree = "<group>"; };
 		97DD82D3208F516700D0AE40 /* Lexer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Lexer.hpp; sourceTree = "<group>"; };
 		97DD82D4208F56FF00D0AE40 /* AVMException.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AVMException.hpp; sourceTree = "<group>"; };
 		97DD82D5208F571600D0AE40 /* AVMException.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AVMException.cpp; sourceTree = "<group>"; };

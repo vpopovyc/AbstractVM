@@ -1,28 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   Instructions.hpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vpopovyc <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/04/24 15:42:40 by vpopovyc          #+#    #+#             */
-/*   Updated: 2018/04/24 15:42:42 by vpopovyc         ###   ########.fr       */
+/*   Created: 2018/04/25 19:57:20 by vpopovyc          #+#    #+#             */
+/*   Updated: 2018/04/25 19:57:21 by vpopovyc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <Lexer.hpp>
-#include <AVMException.hpp>
-#include <iostream>
+#pragma once
 
-int main(const int ac, const char *av[])
+struct Instructions
 {
-    Lexer lexer;
-
-    try {
-        lexer.analyzeFile(ac, av);
-    } catch (AVMException &e) {
-        std::cout << e.what() << std::endl;
-    }
-    std::cout << lexer;
-    return 0;
-}
+    static ListOfInstructions stringToEnum(const std::string &typestr);
+    static bool isValid(const ListOfInstructions &instr);
+    friend std::ostream& operator<<(std::ostream& os, const ListOfInstructions& instr);
+};

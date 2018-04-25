@@ -1,0 +1,9 @@
+pop
+dump
+add
+sub
+mul
+div
+mod
+print
+exit

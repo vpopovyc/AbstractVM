@@ -1,28 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   OperandType.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vpopovyc <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/04/24 15:42:40 by vpopovyc          #+#    #+#             */
-/*   Updated: 2018/04/24 15:42:42 by vpopovyc         ###   ########.fr       */
+/*   Created: 2018/04/25 19:47:05 by vpopovyc          #+#    #+#             */
+/*   Updated: 2018/04/25 19:47:06 by vpopovyc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <Lexer.hpp>
-#include <AVMException.hpp>
-#include <iostream>
+#pragma once
 
-int main(const int ac, const char *av[])
+struct OperandType
 {
-    Lexer lexer;
+    enum ListOfOperandTypes
+    {
+    	Int8,
+    	Int16,
+    	Int32,
+    	Float,
+    	Double,
+    	NONE
+    };
 
-    try {
-        lexer.analyzeFile(ac, av);
-    } catch (AVMException &e) {
-        std::cout << e.what() << std::endl;
-    }
-    std::cout << lexer;
-    return 0;
-}
+    ListOfOperandTypes toEnum(const std::string &typestr);
+    bool isValid(const ListOfOperandTypes &instr);
+    friend std::ostream& operator<<(std::ostream& os, const ListOfOperandTypes& instr);
+};

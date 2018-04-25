@@ -20,7 +20,7 @@ OBJ = $(SRC:.cpp=.o)
 
 CC = clang++
 
-CCFLAGS = -Wall -Wextra -Werror -std=c++17
+CCFLAGS = -Wall -Wextra -Werror -std=c++1z -g
 
 AVMINC = -Iincludes
 

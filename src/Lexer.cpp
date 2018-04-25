@@ -11,24 +11,57 @@
 /* ************************************************************************** */
 
 #include <Lexer.hpp>
+#include <iostream>
 #include <fstream>
 #include <AVMException.hpp>
+
+using Instruction=Instructions::ListOfInstructions;
 
 Lexer::Lexer() {}
 Lexer::~Lexer() {}
 Lexer::Lexer(const Lexer &copy) { *this = copy; }
-
 Lexer &Lexer::operator=(const Lexer &rvalue)
 {
     // Do assign
     (void)rvalue;
     return *this;
 }
-
-void Lexer::analyzeFileImpl(const std::ifstream &file)
+std::ostream& operator<<(std::ostream& os, const Lexer& instr)
 {
-    (void)file;
-    throw AVMException(Reason::LEXER_ERROR, "Test error");
+    instr.dump();
+    os << std::endl;
+    return os;
+}
+
+const std::regex Lexer::m_noValueRegex("\\s*(pop|dump|add|sub|mul|div|mod|print|exit)\\s*(?:;.*)?");
+
+void Lexer::analyzeFileImpl(std::ifstream &file)
+{
+    std::string line;
+
+    auto matchRegex = [&line](const std::regex &exp) -> Instruction {
+        if (std::regex_match(line, exp)) {
+            std::string instructionstr = std::regex_replace(line, exp, "$1");
+            return Instructions::stringToEnum(instructionstr);
+        }
+        return Instruction::NONE;
+    };
+
+    bool errorHit = false;
+    while(std::getline(file, line))
+    {
+        Instruction wInstr;
+        wInstr = matchRegex(m_noValueRegex);
+        if (Instructions::isInstrValid(wInstr)) {
+            m_instructions.push_back(wInstr);
+        } else {
+            errorHit = true;
+        }
+    }
+    if (errorHit) {
+        // TODO: More meaningfull err msg
+        throw AVMException(Reason::LEXER_ERROR, "Multiple errors :(");
+    }
 }
 
 void Lexer::analyzeFile(const int &ac, const char *av[])
@@ -44,3 +77,13 @@ void Lexer::analyzeFile(const int &ac, const char *av[])
 
     analyzeFileImpl(infile);
 }
+
+void Lexer::dump() const
+{
+    std::cout << "~~~~ Lexemes Dump ~~~~" << std::endl;  
+    for (auto &instruction : m_instructions) {
+            std::cout << instruction << std::endl;
+    }
+    std::cout << "~~~~ Lexemes Dump ~~~~" << std::endl;  
+}
+
