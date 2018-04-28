@@ -1,26 +1,20 @@
 #include <typeinfo>
 #include <iostream>
+#include <cfloat>
+#include <sstream>
+#include <exception>
+#include <string>
+#include <Lexeme.hpp>
+#include <AVMException.hpp>
+#include <functional>
 
-class A
+int main(int ac, char *av[])
 {
-public:
-		union {
-			int ivalue;
-			float fvalue;
-			double dvalue;		
-		} m_raw;
 
-};
-
-auto foo()
-{
-	A a;
-	a.m_raw.ivalue = 1;
-	return a.m_raw;
-}
-
-int main()
-{
-	auto raw = foo();
-	std::cout << raw.ivalue << std::endl;
+	try {
+		Lexer::Lexeme a(av[1], av[2]);
+		std::cout << a << std::endl;
+	} catch (AVMException &e) {
+		std::cout << e.what() << std::endl;
+	}
 }

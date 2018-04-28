@@ -11,67 +11,150 @@
 /* ************************************************************************** */
 
 #include <Lexeme.hpp>
+#include <sstream>
+#include <cstdint>
+#include <cfloat>
+#include <AVMException.hpp>
+#include <functional>
 
 namespace Lexer
 {
-	Lexeme::Lexeme() {}
-	Lexeme::~Lexeme() {}
-	Lexeme::Lexeme(const Lexeme &copy)
-	{
-		*this = copy;
-	}
-	Lexeme &Lexeme::operator=(const Lexeme &rvalue)
-	{
-		m_type = rvalue.m_type;
-		return *this;
-	}
+    Lexeme::Lexeme() {}
+    Lexeme::~Lexeme() {}
+    Lexeme::Lexeme(const Lexeme &copy)
+    {
+        *this = copy;
+    }
+    Lexeme &Lexeme::operator=(const Lexeme &rvalue)
+    {
+        m_type = rvalue.m_type;
+        return *this;
+    }
 
-	Lexeme::Lexeme(const std::string &typestr, const std::string &rawValue="")
-	{
-		int type = 0
-		// instr
-	    if (typestr == "push")   type = Instruction::PUSH;
-	    if (typestr == "pop")    type = Instruction::POP;
-	    if (typestr == "dump")   type = Instruction::DUMP;
-	    if (typestr == "assert") type = Instruction::ASSERT;
-	    if (typestr == "add")    type = Instruction::ADD;
-	    if (typestr == "sub")    type = Instruction::SUB;
-	    if (typestr == "mul")    type = Instruction::MUL;
-	    if (typestr == "div")    type = Instruction::DIV;
-	    if (typestr == "mod")    type = Instruction::MOD;
-	    if (typestr == "print")  type = Instruction::PRINT;
-	    if (typestr == "exit")   type = Instruction::EXIT;
-	    // ops
-        if (typestr == "int8")   type = OperandType::Int8;
-	    if (typestr == "in16")   type = OperandType::Int16;
-	    if (typestr == "int32")  type = OperandType::Int32;
-	    if (typestr == "float")  type = OperandType::Float;
-	    if (typestr == "double") type = OperandType::Double;
+    Lexeme::Lexeme(const std::string &typestr, const std::string &rawValue)
+    {
+        int type = 0;
+        // instr
+        if (typestr == "push")   type = Instruction::PUSH;
+        if (typestr == "pop")    type = Instruction::POP;
+        if (typestr == "dump")   type = Instruction::DUMP;
+        if (typestr == "assert") type = Instruction::ASSERT;
+        if (typestr == "add")    type = Instruction::ADD;
+        if (typestr == "sub")    type = Instruction::SUB;
+        if (typestr == "mul")    type = Instruction::MUL;
+        if (typestr == "div")    type = Instruction::DIV;
+        if (typestr == "mod")    type = Instruction::MOD;
+        if (typestr == "print")  type = Instruction::PRINT;
+        if (typestr == "exit")   type = Instruction::EXIT;
+        // ops
+        if (typestr == "int8")   type = Operand::INT8;
+        if (typestr == "int16")   type = Operand::INT16;
+        if (typestr == "int32")  type = Operand::INT32;
+        if (typestr == "float")  type = Operand::FLOAT;
+        if (typestr == "double") type = Operand::DOUBLE;
 
-	    if (type == 0)
-	    	// Throw
-	    else
-	    	m_type = type;
-	    	// LEFT HERE
-	    // U WANTED TO COMPLETE SWICTH AND ADD LEXEMS TO Lexer
-	    switch(type)
-	    {
-	    	case OperandType::Int8:    m_raw.m_int8 =
-	    	case OperandType::Int16:   m_raw.m_int16 = 
-	    	case OperandType::Int32:   m_raw.m_int32 = 
-	    	case OperandType::Float:   m_raw.m_float = 
-	    	case OperandType::Double:  m_raw.m_double = 
-	    }
-	}
+        if (type == 0){
+            // throw or not?
+        } else {
+            m_type = type;
+        }
 
-	int Lexeme::type() const
-	{
-		return m_type;
-	}
+        initValue(rawValue);
+    }
 
-	auto Lexeme::value() const
-	{
-		return m_raw;
-	}
+    void Lexeme::initValue(const std::string &rawValue)
+    {
+        auto from = [](auto &c, auto ub, auto lb, auto ovr, auto unr) {
+            auto cValue = c();
+            if (cValue > ub) {
+                throw AVMException(ovr, "Assign: " + std::to_string(cValue));
+            } 
+            if (cValue < lb) {
+                throw AVMException(unr, "Assign: " + std::to_string(cValue));
+            }
+            return cValue;
+        };
 
+        auto dcFunc = std::bind([&rawValue](){return stol(rawValue);});
+        auto fpFunc = std::bind([&rawValue](){return stold(rawValue);});
+
+        switch(m_type)
+        {
+            case Operand::INT8:
+            {
+                m_raw.m_int8 = from(dcFunc, INT8_MAX, INT8_MIN, Reason::OVERFLOW_INT8_ERROR, Reason::UNDERFLOW_INT8_ERROR);
+                break;
+            }
+            case Operand::INT16:
+            {
+                m_raw.m_int16 = from(dcFunc, INT16_MAX, INT16_MIN, Reason::OVERFLOW_INT16_ERROR, Reason::UNDERFLOW_INT16_ERROR);
+                break;
+            }
+            case Operand::INT32:
+            {
+                m_raw.m_int32 = from(dcFunc, INT32_MAX, INT32_MIN, Reason::OVERFLOW_INT32_ERROR, Reason::UNDERFLOW_INT32_ERROR);
+                break;
+            }
+            case Operand::FLOAT:
+            {
+                m_raw.m_float = from(fpFunc, FLT_MAX, -FLT_MAX, Reason::OVERFLOW_FLT_ERROR, Reason::UNDERFLOW_FLT_ERROR);
+                break;
+            }
+            case Operand::DOUBLE:
+            {
+                m_raw.m_double = from(fpFunc, DBL_MAX, -DBL_MAX, Reason::OVERFLOW_DBL_ERROR, Reason::UNDERFLOW_DBL_ERROR);
+                break;
+            }
+        }
+    }
+
+    int Lexeme::type() const
+    {
+        return m_type;
+    }
+
+    u_rawBuff Lexeme::value() const
+    {
+        return m_raw;
+    }
+
+    std::ostream &operator<<(std::ostream &os, Lexeme &lexeme)
+    {
+        std::string res;
+
+        res += "Lexeme type: ";
+        switch(lexeme.type()) {
+            case Instruction::PUSH:   res += "push"; break;
+            case Instruction::POP:    res += "pop"; break;
+            case Instruction::DUMP:   res += "dump"; break;
+            case Instruction::ASSERT: res += "assert"; break;
+            case Instruction::ADD:    res += "add"; break;
+            case Instruction::SUB:    res += "sub"; break;
+            case Instruction::MUL:    res += "mul"; break;
+            case Instruction::DIV:    res += "div"; break;
+            case Instruction::MOD:    res += "mod"; break;
+            case Instruction::PRINT:  res += "print"; break;
+            case Instruction::EXIT:   res += "exit"; break;
+            case Operand::INT8:       res += "int8"; break;
+            case Operand::INT16:      res += "int16"; break;
+            case Operand::INT32:      res += "int32"; break;
+            case Operand::FLOAT:      res += "float"; break;
+            case Operand::DOUBLE:     res += "double"; break;
+        }
+
+        auto printValue = [&](auto value) {
+            res += " value: " + std::to_string(value);
+        };
+
+        switch(lexeme.type()) {
+            case Operand::INT8:   printValue(lexeme.value().m_int8); break;
+            case Operand::INT16:  printValue(lexeme.value().m_int16); break;
+            case Operand::INT32:  printValue(lexeme.value().m_int32); break;
+            case Operand::FLOAT:  printValue(lexeme.value().m_float); break;
+            case Operand::DOUBLE: printValue(lexeme.value().m_double); break;
+        }   
+
+        os << res;
+        return os;
+    }
 }
