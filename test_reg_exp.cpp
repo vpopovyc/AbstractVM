@@ -24,7 +24,7 @@ int main(void)
 	// regex integer("\\s*(push)\\s+(int8|int16|int32)\\(\\s*([-]?\\d+\\.\\d+)\\s*\\)\\s*(?:;.*)?");
 	//regex integer("[[:space:]]*(push)[[:space:]]+(int8|int16|int32)\\([[:space:]]*([-]?[[:digit:]]+.[[:digit:]]+)[[:space:]]*\\)[[:space:]]*");
 
-	regex integer("\\s*(pop|dump|add|sub|mul|div|mod|print|exit)\\s*(?:;.*)?");
+	regex integer("(?:(?:\\s*)?(?:;.*)?)?");
 
 	while (true)
 	{

@@ -15,24 +15,32 @@
 # include <regex>
 # include <string>
 # include <fstream>
+# include <Lexeme.hpp>
 
-using Instruction=Instructions::ListOfInstructions;
 
-class Lexer
+namespace Lexer
 {
-public:
-    Lexer();
-    ~Lexer();
-    Lexer(const Lexer &copy);
-    Lexer &operator=(const Lexer &rvalue);
-    friend std::ostream& operator<<(std::ostream& os, const Lexer& instr);
 
-    void analyzeFile(const int &ac, const char *av[]);
-private:
-    void analyzeFileImpl(std::ifstream &file);
-    void matchType(const std::string &file);
-    void dump() const;
-private:
-    static const std::regex m_noValueRegex;
-    std::vector<Instruction> m_lexemes;
-};
+    class Lexer
+    {
+    public:
+        Lexer();
+        ~Lexer();
+        Lexer(const Lexer &copy);
+        Lexer &operator=(const Lexer &rvalue);
+        friend std::ostream& operator<<(std::ostream& os, const Lexer& instr);
+
+        void analyze(const int &ac, const char *av[]);
+    private:
+        void analyzeImpl(std::function<bool (std::string&)> get_next_line);
+        void matchType(const std::string &file);
+        void dump() const;
+    private:
+        static const std::regex m_unaryRegex;
+        static const std::regex m_binaryIntRegex;
+        static const std::regex m_binaryFltRegex;
+        static const std::regex m_skipLineRegex;
+        static const std::regex m_EOIRegex;
+        std::vector<Lexeme> m_lexemes;
+    };
+}

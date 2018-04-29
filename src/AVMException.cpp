@@ -66,7 +66,7 @@ const char *AVMException::what() const noexcept
         case Reason::OVERFLOW_FLT_ERROR:    log("\nNote: Upper-bound of float: " + std::to_string(FLT_MAX)); break;
         case Reason::UNDERFLOW_FLT_ERROR:   log("\nNote: Lower-bound of float: " + std::to_string(-FLT_MAX)); break;
         case Reason::OVERFLOW_DBL_ERROR:    log("\nNote: Upper-bound of double: " + std::to_string(DBL_MAX)); break;
-        case Reason::UNDERFLOW_DBL_ERROR:   log("\nNote: Lower-bound of double: " + std::to_string(-DBL_MAX));
+        case Reason::UNDERFLOW_DBL_ERROR:   log("\nNote: Lower-bound of double: " + std::to_string(-DBL_MAX)); break;
         default: {}
     }
     return what.c_str();

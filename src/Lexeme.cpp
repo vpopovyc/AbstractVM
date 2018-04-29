@@ -28,6 +28,7 @@ namespace Lexer
     Lexeme &Lexeme::operator=(const Lexeme &rvalue)
     {
         m_type = rvalue.m_type;
+        m_raw = rvalue.m_raw;
         return *this;
     }
 
@@ -54,7 +55,7 @@ namespace Lexer
         if (typestr == "double") type = Operand::DOUBLE;
 
         if (type == 0){
-            // throw or not?
+            throw AVMException(Reason::LEXER_ERROR, "Invalid instruction");
         } else {
             m_type = type;
         }
@@ -118,7 +119,7 @@ namespace Lexer
         return m_raw;
     }
 
-    std::ostream &operator<<(std::ostream &os, Lexeme &lexeme)
+    std::ostream &operator<<(std::ostream &os, const Lexeme &lexeme)
     {
         std::string res;
 

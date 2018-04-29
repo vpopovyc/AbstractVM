@@ -57,16 +57,16 @@ namespace Lexer
     class Lexeme
     {
     public:
-        Lexeme();
         ~Lexeme();
         Lexeme(const Lexeme &copy);
         Lexeme &operator=(const Lexeme &rvalue);
 
         Lexeme(const std::string &type, const std::string &rawValue="");
-        friend std::ostream &operator<<(std::ostream &os, Lexeme &lexeme);
+        friend std::ostream &operator<<(std::ostream &os, const Lexeme &lexeme);
         int type() const;
         u_rawBuff value() const;
     private:
+        Lexeme();
         void initValue(const std::string &rawValue);
 
     private:

@@ -16,10 +16,10 @@
 
 int main(const int ac, const char *av[])
 {
-    Lexer lexer;
+    Lexer::Lexer lexer;
 
     try {
-        lexer.analyzeFile(ac, av);
+        lexer.analyze(ac, av);
     } catch (AVMException &e) {
         std::cout << e.what() << std::endl;
     }
