@@ -38,7 +38,7 @@ namespace Lexer
     {
         enum ListOfOperands
         {
-            INT8 = 0xbeef,
+            INT8 = 0,
             INT16,
             INT32,
             FLOAT,

@@ -50,6 +50,7 @@ const char *AVMException::what() const noexcept
         case Reason::UNDERFLOW_FLT_ERROR:   log("Float underflow error: "); break;
         case Reason::OVERFLOW_DBL_ERROR:    log("Double overflow error: "); break;
         case Reason::UNDERFLOW_DBL_ERROR:   log("Double underflow error: "); break;
+        case Reason::UNKNOWN_OPERAND:       log("Operand template error: "); break;
         default: log("Unknown error: ");
     }
 
@@ -60,9 +61,9 @@ const char *AVMException::what() const noexcept
         case Reason::OVERFLOW_INT8_ERROR:   log("\nNote: Upper-bound of int8 is: " + std::to_string(INT8_MAX)); break;
         case Reason::UNDERFLOW_INT8_ERROR:  log("\nNote: Lower-bound of int8 is: " + std::to_string(INT8_MIN)); break;
         case Reason::OVERFLOW_INT16_ERROR:  log("\nNote: Upper-bound of int16: " + std::to_string(INT16_MAX)); break;
-        case Reason::UNDERFLOW_INT16_ERROR: log("\nNote: Lower-bound of int16: " + std::to_string(INT16_MAX)); break;
+        case Reason::UNDERFLOW_INT16_ERROR: log("\nNote: Lower-bound of int16: " + std::to_string(INT16_MIN)); break;
         case Reason::OVERFLOW_INT32_ERROR:  log("\nNote: Upper-bound of int32: " + std::to_string(INT32_MAX)); break;
-        case Reason::UNDERFLOW_INT32_ERROR: log("\nNote: Lower-bound of int32: " + std::to_string(INT32_MAX)); break;
+        case Reason::UNDERFLOW_INT32_ERROR: log("\nNote: Lower-bound of int32: " + std::to_string(INT32_MIN)); break;
         case Reason::OVERFLOW_FLT_ERROR:    log("\nNote: Upper-bound of float: " + std::to_string(FLT_MAX)); break;
         case Reason::UNDERFLOW_FLT_ERROR:   log("\nNote: Lower-bound of float: " + std::to_string(-FLT_MAX)); break;
         case Reason::OVERFLOW_DBL_ERROR:    log("\nNote: Upper-bound of double: " + std::to_string(DBL_MAX)); break;

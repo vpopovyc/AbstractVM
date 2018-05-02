@@ -87,7 +87,7 @@ namespace Lexer
                 if (std::getline(std::cin, line)) {
                     return !std::regex_match(line, m_EOIRegex);
                 } else {
-                    if (feof(stdin)){
+                    if (feof(stdin)) {
                         clearerr(stdin);
                         std::cin.clear();
                         return true;
