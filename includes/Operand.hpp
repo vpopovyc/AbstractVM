@@ -28,13 +28,15 @@ class Operand : public IOperand
 public:
 	~Operand() {};
 	Operand(const Operand &rhs) { *this = rhs; } 
-	Operand &operator=(const Operand &rhs) { m_data = rhs.m_data; m_type = rhs.m_type; return *this; } 
+	Operand &operator=(const Operand &rhs) { m_data = rhs.m_data; m_type = rhs.m_type; m_str = rhs.m_str; return *this; } 
 
-	Operand(const T &data, const OperandType &type) : m_data(data), m_type(type) {};
+	Operand(const T &data, const OperandType &type) : m_data(data), m_type(type), m_str(std::to_string(data)) {};
 
 	T getData() const { return m_data; }
 	int getPrecision(void) const { return static_cast<int>(m_type); }
 	OperandType getType(void) const { return m_type; }
+
+	std::string const &toString(void) const { return m_str; }
 
 	IOperand const *operator+(IOperand const &rhs) const
 	{
@@ -46,10 +48,10 @@ public:
 								  type, std::placeholders::_1);
 
 			if (type == OperandType::FLOAT || type == OperandType::DOUBLE) {
-				long double value = (long double)getData() + op->getData();
+				long double value = (long double)getData() + (long double)op->getData();
 				return eval(value);
 			} else {
-				ssize_t value = (ssize_t)getData() + op->getData();
+				ssize_t value = (ssize_t)getData() + (ssize_t)op->getData();
 				return eval(value);
 			}
 		};
@@ -75,6 +77,180 @@ public:
 			return plus(op5);
 		}
 		throw AVMException(Reason::UNKNOWN_OPERAND, "Addition of unknown operand");
+	}
+
+	IOperand const *operator-(IOperand const &rhs) const
+	{
+		auto minus = [&](auto *op) -> IOperand const * {
+			OperandType type = this->getPrecision() >= op->getPrecision() ? 
+							   this->getType() : op->getType();
+
+			auto eval = std::bind([&](OperandType type, auto value) { return runtimeEvaluationOf(type, value); },
+								  type, std::placeholders::_1);
+
+			if (type == OperandType::FLOAT || type == OperandType::DOUBLE) {
+				long double value = (long double)getData() - (long double)op->getData();
+				return eval(value);
+			} else {
+				ssize_t value = (ssize_t)getData() - (ssize_t)op->getData();
+				return eval(value);
+			}
+		};
+
+		auto *op1 = dynamic_cast<const Operand<int8_t> *>(&rhs);
+		if (op1) {
+			return minus(op1);
+		}
+		auto *op2 = dynamic_cast<const Operand<int16_t> *>(&rhs);
+		if (op2) {
+			return minus(op2);
+		}
+		auto *op3 = dynamic_cast<const Operand<int32_t> *>(&rhs);
+		if (op3) {
+			return minus(op3);
+		}
+		auto *op4 = dynamic_cast<const Operand<float> *>(&rhs);
+		if (op4) {
+			return minus(op4);
+		}
+		auto *op5 = dynamic_cast<const Operand<double> *>(&rhs);
+		if (op5) {
+			return minus(op5);
+		}
+		throw AVMException(Reason::UNKNOWN_OPERAND, "Substraction of unknown operand");
+	}
+
+	IOperand const *operator*(IOperand const &rhs) const
+	{
+		auto mul = [&](auto *op) -> IOperand const * {
+			OperandType type = this->getPrecision() >= op->getPrecision() ? 
+							   this->getType() : op->getType();
+
+			auto eval = std::bind([&](OperandType type, auto value) { return runtimeEvaluationOf(type, value); },
+								  type, std::placeholders::_1);
+
+			if (type == OperandType::FLOAT || type == OperandType::DOUBLE) {
+				long double value = (long double)getData() * (long double)op->getData();
+				return eval(value);
+			} else {
+				ssize_t value = (ssize_t)getData() * (ssize_t)op->getData();
+				return eval(value);
+			}
+		};
+
+		auto *op1 = dynamic_cast<const Operand<int8_t> *>(&rhs);
+		if (op1) {
+			return mul(op1);
+		}
+		auto *op2 = dynamic_cast<const Operand<int16_t> *>(&rhs);
+		if (op2) {
+			return mul(op2);
+		}
+		auto *op3 = dynamic_cast<const Operand<int32_t> *>(&rhs);
+		if (op3) {
+			return mul(op3);
+		}
+		auto *op4 = dynamic_cast<const Operand<float> *>(&rhs);
+		if (op4) {
+			return mul(op4);
+		}
+		auto *op5 = dynamic_cast<const Operand<double> *>(&rhs);
+		if (op5) {
+			return mul(op5);
+		}
+		throw AVMException(Reason::UNKNOWN_OPERAND, "Multiply of unknown operand");
+	}
+
+	IOperand const *operator/(IOperand const &rhs) const
+	{
+		auto div = [&](auto *op) -> IOperand const * {
+			OperandType type = this->getPrecision() >= op->getPrecision() ? 
+							   this->getType() : op->getType();
+
+			auto eval = std::bind([&](OperandType type, auto value) { return runtimeEvaluationOf(type, value); },
+								  type, std::placeholders::_1);
+
+
+			if (op->getData() == 0) {
+				throw AVMException(Reason::DIVISION_BY_ZERO, std::to_string(this->getData()) + " by " + std::to_string(op->getData()));
+			}
+
+			if (type == OperandType::FLOAT || type == OperandType::DOUBLE) {
+				long double value = (long double)getData() / (long double)op->getData();
+				return eval(value);
+			} else {
+				ssize_t value = (ssize_t)getData() / (ssize_t)op->getData();
+				return eval(value);
+			}
+		};
+
+		auto *op1 = dynamic_cast<const Operand<int8_t> *>(&rhs);
+		if (op1) {
+			return div(op1);
+		}
+		auto *op2 = dynamic_cast<const Operand<int16_t> *>(&rhs);
+		if (op2) {
+			return div(op2);
+		}
+		auto *op3 = dynamic_cast<const Operand<int32_t> *>(&rhs);
+		if (op3) {
+			return div(op3);
+		}
+		auto *op4 = dynamic_cast<const Operand<float> *>(&rhs);
+		if (op4) {
+			return div(op4);
+		}
+		auto *op5 = dynamic_cast<const Operand<double> *>(&rhs);
+		if (op5) {
+			return div(op5);
+		}
+		throw AVMException(Reason::UNKNOWN_OPERAND, "Multiply of unknown operand");
+	}
+
+	IOperand const *operator%(IOperand const &rhs) const
+	{
+		auto div = [&](auto *op) -> IOperand const * {
+			OperandType type = this->getPrecision() >= op->getPrecision() ? 
+							   this->getType() : op->getType();
+
+			auto eval = std::bind([&](OperandType type, auto value) { return runtimeEvaluationOf(type, value); },
+								  type, std::placeholders::_1);
+
+
+			if (op->getData() == 0) {
+				throw AVMException(Reason::MODULO_BY_ZERO, std::to_string(this->getData()) + " by " + std::to_string(op->getData()));
+			}
+
+			if (type == OperandType::FLOAT || type == OperandType::DOUBLE) {
+				long double value = fmod((long double)getData(), (long double)op->getData());
+				return eval(value);
+			} else {
+				ssize_t value = (ssize_t)getData() % (ssize_t)op->getData();
+				return eval(value);
+			}
+		};
+
+		auto *op1 = dynamic_cast<const Operand<int8_t> *>(&rhs);
+		if (op1) {
+			return div(op1);
+		}
+		auto *op2 = dynamic_cast<const Operand<int16_t> *>(&rhs);
+		if (op2) {
+			return div(op2);
+		}
+		auto *op3 = dynamic_cast<const Operand<int32_t> *>(&rhs);
+		if (op3) {
+			return div(op3);
+		}
+		auto *op4 = dynamic_cast<const Operand<float> *>(&rhs);
+		if (op4) {
+			return div(op4);
+		}
+		auto *op5 = dynamic_cast<const Operand<double> *>(&rhs);
+		if (op5) {
+			return div(op5);
+		}
+		throw AVMException(Reason::UNKNOWN_OPERAND, "Multiply of unknown operand");
 	}
 
 private:
@@ -143,4 +319,5 @@ private:
 private:
 	T m_data;
 	OperandType m_type;
+	std::string m_str;
 };

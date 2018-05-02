@@ -51,6 +51,8 @@ const char *AVMException::what() const noexcept
         case Reason::OVERFLOW_DBL_ERROR:    log("Double overflow error: "); break;
         case Reason::UNDERFLOW_DBL_ERROR:   log("Double underflow error: "); break;
         case Reason::UNKNOWN_OPERAND:       log("Operand template error: "); break;
+        case Reason::DIVISION_BY_ZERO:      log("Division by zero error: "); break;
+        case Reason::MODULO_BY_ZERO:        log("Modulo by zero error: "); break;
         default: log("Unknown error: ");
     }
 
