@@ -13,6 +13,7 @@
 #pragma once
 
 #include <tuple>
+#include <cmath>
 #include <cfloat>
 #include <cstdint>
 #include <IOperand.hpp>

@@ -53,6 +53,7 @@ const char *AVMException::what() const noexcept
         case Reason::UNKNOWN_OPERAND:       log("Operand template error: "); break;
         case Reason::DIVISION_BY_ZERO:      log("Division by zero error: "); break;
         case Reason::MODULO_BY_ZERO:        log("Modulo by zero error: "); break;
+        case Reason::POP_OF_EMPTY_STACK:    log("Pop of empty stack error: "); break;
         default: log("Unknown error: ");
     }
 

@@ -12,7 +12,7 @@
 
 EXEC = avm
 
-SRCFILENAME := Lexer.cpp Lexeme.cpp AVMException.cpp main.cpp
+SRCFILENAME := Parser.cpp Lexer.cpp Lexeme.cpp AVMException.cpp main.cpp
 
 SRC = $(addprefix src/, $(SRCFILENAME))
 

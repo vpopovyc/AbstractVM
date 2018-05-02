@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include <Lexer.hpp>
+#include <Parser.hpp>
 #include <AVMException.hpp>
 #include <iostream>
 
@@ -20,6 +21,12 @@ int main(const int ac, const char *av[])
 
     try {
         lexer.analyze(ac, av);
+        Parser parser(lexer.lexemes());
+
+        auto abs = parser.abs();
+        for (auto &node : abs) {
+        	node();
+        }
     } catch (AVMException &e) {
         std::cout << e.what() << std::endl;
     }

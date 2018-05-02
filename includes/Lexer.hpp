@@ -31,6 +31,7 @@ namespace Lexer
         friend std::ostream& operator<<(std::ostream& os, const Lexer& instr);
 
         void analyze(const int &ac, const char *av[]);
+        std::vector<Lexeme> &lexemes();
     private:
         void analyzeImpl(std::function<bool (std::string&)> get_next_line);
         void matchType(const std::string &file);

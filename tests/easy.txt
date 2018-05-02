@@ -1,11 +1,7 @@
-push int8(     127      ) ; adsf
-;;
-
-assert int32(     21      ) ; af
-
-push float(42.12345)
-push double(42.210)
-
-; asdfsd
-
-;;
+push int32(42)
+push float(21.2)
+push double(42.5)
+pop
+pop
+pop
+pop
