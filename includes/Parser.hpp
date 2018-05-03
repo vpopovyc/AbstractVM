@@ -12,6 +12,7 @@
 
 #pragma once
 
+#include <deque>
 #include <Lexer.hpp>
 #include <IOperand.hpp>
 
@@ -28,6 +29,7 @@ public:
 
 private:
 	Parser();
-	std::vector<IOperand const *> m_operands;
+	std::deque<IOperand const *> m_operands;
+	std::deque<IOperand const *> m_execution_stack;
 	std::vector<std::function<void(void)>> m_abs;
 };

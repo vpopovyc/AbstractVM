@@ -34,7 +34,7 @@ namespace Lexer
 
     Lexeme::Lexeme(const std::string &typestr, const std::string &rawValue)
     {
-        int type = 0;
+        int type = -1;
         // instr
         if (typestr == "push")   type = Instruction::PUSH;
         if (typestr == "pop")    type = Instruction::POP;
@@ -54,7 +54,7 @@ namespace Lexer
         if (typestr == "float")  type = Operand::FLOAT;
         if (typestr == "double") type = Operand::DOUBLE;
 
-        if (type == 0){
+        if (type == -1){
             throw AVMException(Reason::LEXER_ERROR, "Invalid instruction");
         } else {
             m_type = type;

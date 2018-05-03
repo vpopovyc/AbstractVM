@@ -56,6 +56,7 @@ namespace Lexer
 
         size_t lineIdx = 0;
         std::string line;
+        bool errHit = false;
 
         while(get_next_line(line))
         {
@@ -77,8 +78,13 @@ namespace Lexer
                     throw AVMException(Reason::LEXER_ERROR, "Invalid syntax:\n\t" + line);
                 }
             } catch (AVMException &e) {
+                errHit = true;
                 std::cout << "Line: " << lineIdx << ": " << e.what() << std::endl;
             }
+        }
+
+        if (errHit) {
+            throw AVMException(Reason::LEXER_ERROR, "Please fix errors to procced o_o");
         }
     }
 

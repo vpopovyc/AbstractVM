@@ -30,6 +30,7 @@ int main(const int ac, const char *av[])
     } catch (AVMException &e) {
         std::cout << e.what() << std::endl;
     }
-    std::cout << lexer;
+
+    // std::cout << lexer;
     return 0;
 }

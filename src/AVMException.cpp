@@ -54,6 +54,11 @@ const char *AVMException::what() const noexcept
         case Reason::DIVISION_BY_ZERO:      log("Division by zero error: "); break;
         case Reason::MODULO_BY_ZERO:        log("Modulo by zero error: "); break;
         case Reason::POP_OF_EMPTY_STACK:    log("Pop of empty stack error: "); break;
+        case Reason::ASSERTION_FAILLURE:    log("Assertion faillure: "); break;
+        case Reason::EXIT_MISSING:          log("Execution terminate error: "); break;
+        case Reason::NO_ARGS_FOR_BIN_EXPR:  log("Binary expression error: "); break;
+        case Reason::EMPTY_STACK:           log("Requested op execution on empty stack error: "); break;
+        case Reason::PRINT_OF_NOT_CHAR:     log("Print of not int8 type error: "); break;
         default: log("Unknown error: ");
     }
 
@@ -71,6 +76,7 @@ const char *AVMException::what() const noexcept
         case Reason::UNDERFLOW_FLT_ERROR:   log("\nNote: Lower-bound of float: " + std::to_string(-FLT_MAX)); break;
         case Reason::OVERFLOW_DBL_ERROR:    log("\nNote: Upper-bound of double: " + std::to_string(DBL_MAX)); break;
         case Reason::UNDERFLOW_DBL_ERROR:   log("\nNote: Lower-bound of double: " + std::to_string(-DBL_MAX)); break;
+        case Reason::NO_ARGS_FOR_BIN_EXPR:  log("\nNote: stack size should be equal or greater than 2"); break;
         default: {}
     }
     return what.c_str();

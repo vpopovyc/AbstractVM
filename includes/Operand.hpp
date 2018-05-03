@@ -39,6 +39,35 @@ public:
 
 	std::string const &toString(void) const { return m_str; }
 
+	bool operator==(IOperand const &rhs) const
+	{
+		auto compare = [&](auto *op) -> bool {
+			return (getData() == op->getData());
+		};
+
+		auto *op1 = dynamic_cast<const Operand<int8_t> *>(&rhs);
+		if (op1) {
+			return compare(op1);
+		}
+		auto *op2 = dynamic_cast<const Operand<int16_t> *>(&rhs);
+		if (op2) {
+			return compare(op2);
+		}
+		auto *op3 = dynamic_cast<const Operand<int32_t> *>(&rhs);
+		if (op3) {
+			return compare(op3);
+		}
+		auto *op4 = dynamic_cast<const Operand<float> *>(&rhs);
+		if (op4) {
+			return compare(op4);
+		}
+		auto *op5 = dynamic_cast<const Operand<double> *>(&rhs);
+		if (op5) {
+			return compare(op5);
+		}
+		throw AVMException(Reason::UNKNOWN_OPERAND, "Comparison of unknown operand");
+	}
+
 	IOperand const *operator+(IOperand const &rhs) const
 	{
 		auto plus = [&](auto *op) -> IOperand const * {
