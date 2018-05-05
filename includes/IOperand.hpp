@@ -25,6 +25,11 @@ public:
 	virtual IOperand const *operator*(IOperand const &rhs) const = 0;
 	virtual IOperand const *operator/(IOperand const &rhs) const = 0;
 	virtual IOperand const *operator%(IOperand const &rhs) const = 0;
+	virtual IOperand const *square() const = 0;
+	virtual IOperand const *square_root() const = 0;
+	virtual IOperand const *nlog() const = 0;
+	virtual IOperand const *log_10() const = 0;
+	virtual IOperand const *absolute() const = 0;
 	virtual bool operator==(IOperand const &rhs) const = 0;
 	virtual std::string const &toString(void) const = 0;
 	virtual ~IOperand( void ) {}

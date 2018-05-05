@@ -29,6 +29,9 @@ std::vector<std::function<void()>> const &Parser::abs() const { return m_abs; }
 
 Parser::Parser(std::vector<Lexer::Lexeme> lexemes)
 {
+	if (lexemes.size() == 0)
+		return;
+
 	static const std::vector<std::function<void()>> instructions
 	{
 		std::bind([&]() {
@@ -80,7 +83,10 @@ Parser::Parser(std::vector<Lexer::Lexeme> lexemes)
 			auto *op2 = m_execution_stack[1];
 			m_execution_stack.pop_front();
 			m_execution_stack.pop_front();
-			m_execution_stack.push_front(*op1 - *op2);
+			// For non commutative operations,
+			// consider the stack v1 on v2 on stack_tail,
+			// the calculation in infix notation v2 op v1.
+			m_execution_stack.push_front(*op2 - *op1);
 		}),
 		std::bind([&]() {
 			if (m_execution_stack.size() < 2) {
@@ -104,7 +110,10 @@ Parser::Parser(std::vector<Lexer::Lexeme> lexemes)
 			auto *op2 = m_execution_stack[1];
 			m_execution_stack.pop_front();
 			m_execution_stack.pop_front();
-			m_execution_stack.push_front(*op1 / *op2);
+			// For non commutative operations,
+			// consider the stack v1 on v2 on stack_tail,
+			// the calculation in infix notation v2 op v1.
+			m_execution_stack.push_front(*op2 / *op1);
 		}),
 		std::bind([&]() {
 			if (m_execution_stack.size() < 2) {
@@ -116,7 +125,75 @@ Parser::Parser(std::vector<Lexer::Lexeme> lexemes)
 			auto *op2 = m_execution_stack[1];
 			m_execution_stack.pop_front();
 			m_execution_stack.pop_front();
-			m_execution_stack.push_front(*op1 % *op2);
+			// For non commutative operations,
+			// consider the stack v1 on v2 on stack_tail,
+			// the calculation in infix notation v2 op v1.
+			m_execution_stack.push_front(*op2 % *op1);
+		}),
+		std::bind([&]() {
+			if (m_execution_stack.size() == 0) {
+				throw AVMException(Reason::EMPTY_STACK,
+					               "No value to square");
+			}
+
+			auto *op1 = m_execution_stack[0];
+			m_execution_stack.pop_front();
+			// For non commutative operations,
+			// consider the stack v1 on v2 on stack_tail,
+			// the calculation in infix notation v2 op v1.
+			m_execution_stack.push_front(op1->square());
+		}),
+		std::bind([&]() {
+			if (m_execution_stack.size() == 0) {
+				throw AVMException(Reason::EMPTY_STACK,
+					               "No value to sqrt");
+			}
+
+			auto *op1 = m_execution_stack[0];
+			m_execution_stack.pop_front();
+			// For non commutative operations,
+			// consider the stack v1 on v2 on stack_tail,
+			// the calculation in infix notation v2 op v1.
+			m_execution_stack.push_front(op1->square_root());
+		}),
+		std::bind([&]() {
+			if (m_execution_stack.size() == 0) {
+				throw AVMException(Reason::EMPTY_STACK,
+					               "No value to log");
+			}
+
+			auto *op1 = m_execution_stack[0];
+			m_execution_stack.pop_front();
+			// For non commutative operations,
+			// consider the stack v1 on v2 on stack_tail,
+			// the calculation in infix notation v2 op v1.
+			m_execution_stack.push_front(op1->nlog());
+		}),
+		std::bind([&]() {
+			if (m_execution_stack.size() == 0) {
+				throw AVMException(Reason::EMPTY_STACK,
+					               "No value to log10");
+			}
+
+			auto *op1 = m_execution_stack[0];
+			m_execution_stack.pop_front();
+			// For non commutative operations,
+			// consider the stack v1 on v2 on stack_tail,
+			// the calculation in infix notation v2 op v1.
+			m_execution_stack.push_front(op1->log_10());
+		}),
+		std::bind([&]() {
+			if (m_execution_stack.size() == 0) {
+				throw AVMException(Reason::EMPTY_STACK,
+					               "No value to abs");
+			}
+
+			auto *op1 = m_execution_stack[0];
+			m_execution_stack.pop_front();
+			// For non commutative operations,
+			// consider the stack v1 on v2 on stack_tail,
+			// the calculation in infix notation v2 op v1.
+			m_execution_stack.push_front(op1->absolute());
 		}),
 		std::bind([&]() {
 			if (m_execution_stack.size() == 0) {

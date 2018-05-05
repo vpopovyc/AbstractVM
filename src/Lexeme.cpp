@@ -45,6 +45,11 @@ namespace Lexer
         if (typestr == "mul")    type = Instruction::MUL;
         if (typestr == "div")    type = Instruction::DIV;
         if (typestr == "mod")    type = Instruction::MOD;
+        if (typestr == "square") type = Instruction::SQUARE;
+        if (typestr == "sqrt")   type = Instruction::SQRT;
+        if (typestr == "log")    type = Instruction::LOG;
+        if (typestr == "log10")  type = Instruction::LOG10;
+        if (typestr == "abs")    type = Instruction::ABS;
         if (typestr == "print")  type = Instruction::PRINT;
         if (typestr == "exit")   type = Instruction::EXIT;
         // ops
@@ -76,8 +81,21 @@ namespace Lexer
             return cValue;
         };
 
-        auto dcFunc = std::bind([&rawValue](){return stol(rawValue);});
-        auto fpFunc = std::bind([&rawValue](){return stold(rawValue);});
+        auto dcFunc = std::bind([&rawValue]() {
+            try {
+                return stoll(rawValue);
+            } catch (const std::out_of_range& e) {
+                throw AVMException(Reason::LEXER_ERROR, "Out of range error");
+            }
+        });
+
+        auto fpFunc = std::bind([&rawValue]() {
+            try {
+                return stold(rawValue);
+            } catch (const std::out_of_range& e) {
+                throw AVMException(Reason::LEXER_ERROR, "Out of range error");
+            }
+        });
 
         switch(m_type)
         {

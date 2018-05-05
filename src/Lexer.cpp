@@ -34,7 +34,7 @@ namespace Lexer
 
     std::vector<Lexeme> &Lexer::lexemes() { return m_lexemes; }
 
-    const std::regex Lexer::m_unaryRegex("\\s*(pop|dump|add|sub|mul|div|mod|print|exit)\\s*(?:;.*)?");
+    const std::regex Lexer::m_unaryRegex("\\s*(pop|dump|add|sub|mul|div|mod|square|sqrt|log|log10|abs|print|exit)\\s*(?:;.*)?");
     const std::regex Lexer::m_binaryIntRegex("\\s*(push|assert)\\s+(int8|int16|int32)\\(\\s*([-]?\\d+)\\s*\\)\\s*(?:;.*)?");
     const std::regex Lexer::m_binaryFltRegex("\\s*(push|assert)\\s+(float|double)\\(\\s*([-]?\\d+\\.\\d+)\\s*\\)\\s*(?:;.*)?");
     const std::regex Lexer::m_skipLineRegex("(?:(?:\\s*)?(?:;.*)?)?");

@@ -20,7 +20,7 @@ OBJ = $(SRC:.cpp=.o)
 
 CC = clang++
 
-CCFLAGS = -Wall -Wextra -Werror -std=c++1z -g
+CCFLAGS = -Wall -Wextra -Werror -std=c++1z
 
 AVMINC = -Iincludes
 
@@ -40,5 +40,4 @@ fclean: clean
 
 re: fclean all
 
-.phony: all clean fclean`  =]=-=-098765rew\
-][poiufcv.≤?
+.phony: all clean fclean re

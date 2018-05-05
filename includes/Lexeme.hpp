@@ -30,6 +30,11 @@ namespace Lexer
             MUL,
             DIV,
             MOD,
+            SQUARE,
+            SQRT,
+            LOG,
+            LOG10,
+            ABS,
             PRINT,
             EXIT
         };

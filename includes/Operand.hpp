@@ -283,6 +283,86 @@ public:
 		throw AVMException(Reason::UNKNOWN_OPERAND, "Multiply of unknown operand");
 	}
 
+	IOperand const *square() const
+	{
+		OperandType type = (OperandType)getPrecision();
+
+		auto square = std::bind([&](OperandType type, auto value) { return runtimeEvaluationOf(type, value); },
+							  type, std::placeholders::_1);
+
+		if (type == OperandType::FLOAT || type == OperandType::DOUBLE) {
+			long double value = pow(getData(), 2.0);
+			return square(value);
+		} else {
+			ssize_t value = pow(getData(), 2.0);
+			return square(value);
+		}
+	}
+
+	IOperand const *square_root() const
+	{
+		OperandType type = (OperandType)getPrecision();
+
+		auto square_root = std::bind([&](OperandType type, auto value) { return runtimeEvaluationOf(type, value); },
+							  type, std::placeholders::_1);
+
+		if (type == OperandType::FLOAT || type == OperandType::DOUBLE) {
+			long double value = sqrt(getData());
+			return square_root(value);
+		} else {
+			ssize_t value = sqrt(getData());
+			return square_root(value);
+		}
+	}
+
+	IOperand const *nlog() const
+	{
+		OperandType type = (OperandType)getPrecision();
+
+		auto nat_log = std::bind([&](OperandType type, auto value) { return runtimeEvaluationOf(type, value); },
+							  type, std::placeholders::_1);
+
+		if (type == OperandType::FLOAT || type == OperandType::DOUBLE) {
+			long double value = log(getData());
+			return nat_log(value);
+		} else {
+			ssize_t value = log(getData());
+			return nat_log(value);
+		}
+	}
+
+	IOperand const *log_10() const
+	{
+		OperandType type = (OperandType)getPrecision();
+
+		auto mlog_10 = std::bind([&](OperandType type, auto value) { return runtimeEvaluationOf(type, value); },
+							  type, std::placeholders::_1);
+
+		if (type == OperandType::FLOAT || type == OperandType::DOUBLE) {
+			long double value = log10(getData());
+			return mlog_10(value);
+		} else {
+			ssize_t value = log10(getData());
+			return mlog_10(value);
+		}
+	}
+
+	IOperand const *absolute() const
+	{
+		OperandType type = (OperandType)getPrecision();
+
+		auto mlog_10 = std::bind([&](OperandType type, auto value) { return runtimeEvaluationOf(type, value); },
+							  type, std::placeholders::_1);
+
+		if (type == OperandType::FLOAT || type == OperandType::DOUBLE) {
+			long double value = abs(getData());
+			return mlog_10(value);
+		} else {
+			ssize_t value = abs(getData());
+			return mlog_10(value);
+		}
+	}
+
 private:
 	Operand() : IOperand() {};
 
